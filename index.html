@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Système de Sécurité – Prison</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at top, #1a1f27, #0b0f14);
+    color: #e0e0e0;
+}
+
+/* ===== ÉCRANS ===== */
+.screen {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ===== LOGIN ===== */
+.login-box {
+    background: #141a22;
+    padding: 30px;
+    width: 360px;
+    border-radius: 10px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
+    text-align: center;
+}
+
+.login-box h2 {
+    margin-bottom: 20px;
+}
+
+.login-box input,
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #0b0f14;
+    color: white;
+    border: 1px solid #2a3441;
+    border-radius: 6px;
+}
+
+.login-box button:hover {
+    background: #1f2630;
+    cursor: pointer;
+}
+
+/* ===== APP ===== */
+.app {
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 15px;
+    width: 100%;
+    height: 100%;
+}
+
+/* BLOCS */
+.block {
+    background: #141a22;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+
+/* CAMERAS */
+.camera img {
+    width: auto;       /* largeur automatique */
+    height: 200px;     /* hauteur fixe */
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+
+/* DETENUS */
+.prisoners {
+    grid-row: span 2;
+}
+
+.prisoners li {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #2a3441;
+}
+
+.prisoners li:hover {
+    background: #1f2630;
+}
+
+/* INFO */
+.locked { color: #ff5f5f; }
+.unlocked { color: #5fff9c; }
+
+button {
+    padding: 10px;
+    width: 100%;
+    background: #0b0f14;
+    border: 1px solid #2a3441;
+    color: white;
+    border-radius: 6px;
+}
+
+button:hover {
+    background: #1f2630;
+}
+
+/* ===== VICTOIRE ===== */
+#victory-screen {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.victory-box {
+    background: #141a22;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 500px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8);
+}
+
+.victory-box h1 {
+    color: #00ff99;
+    margin-bottom: 20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= ÉCRAN VICTOIRE ================= -->
+<div id="victory-screen" class="hidden">
+    <div class="victory-box">
+        <h1>🚨 ÉVASION RÉUSSIE 🚨</h1>
+        <p>
+            Bravo !<br>
+            Noé à réussi à s'évader envois cette page au compte insta Mines'terpol
+        </p>
+        <img src="images/noemerci.jpeg" style="width:150px; margin-bottom:15px;">
+        <p> merci hehe </p>
+        </p>
+        <button onclick="closeVictory()">Retour au système</button>
+    </div>
+</div>
+
+<!-- ================= ÉCRAN LOGIN ================= -->
+<div id="login-screen" class="screen">
+    <div class="login-box">
+        <h2>ME'son d'arrêt de Mines'terpol</h2>
+        <img src="images/logo.jpg" style="width:150px; margin-bottom:15px;">
+        <h2>Accès Sécurisé</h2>
+        <input id="user" placeholder="Identifiant">
+        <input id="pass" type="password" placeholder="Mot de passe">
+        <button onclick="login()">Connexion</button>
+        <p id="error" style="color:red"></p>
+    </div>
+</div>
+
+<!-- ================= ÉCRAN APPLICATION ================= -->
+<div id="app-screen" class="screen hidden">
+    <div class="app">
+
+        <!-- CAMERAS -->
+        <div class="block">
+            <h3>Caméras</h3>
+
+            <div class="camera">
+                <img id="cam1" src="images/camera1.gif">
+                <button onclick="toggleCam(1)">Activer / Couper</button>
+            </div>
+
+            <div class="camera">
+                <img id="cam2" src="images/camera2.gif">
+                <button onclick="toggleCam(2)">Activer / Couper</button>
+            </div>
+        </div>
+
+        <!-- DETENUS -->
+        <div class="block prisoners">
+            <h3>Détenus</h3>
+            <ul>
+                <li onclick="selectPrisoner(0)">001 – Hippolyte Cochard</li>
+                <li onclick="selectPrisoner(1)">002 – Alexandre Malige</li>
+                <li onclick="selectPrisoner(2)">003 – Nicolas Sarkozi</li>
+                <li onclick="selectPrisoner(3)">004 – Dimitri Cha</li>
+                <li onclick="selectPrisoner(4)">005 – Anouk Desmarescaux</li>
+                <li onclick="selectPrisoner(5)">006 – Gaël Perdriau</li>
+                <li onclick="selectPrisoner(6)">007 – Thibaut Barbier</li>
+                <li onclick="selectPrisoner(7)">008 – Koba LaD</li>
+                <li onclick="selectPrisoner(8)">009 – Timothé Chaib</li>
+                <li onclick="selectPrisoner(9)">010 – Andrea Borron</li>
+                <li onclick="selectPrisoner(10)">011 – Noé Devaux</li>
+                <li onclick="selectPrisoner(11)">012 – Linda Frissou</li>
+                <li onclick="selectPrisoner(12)">013 – Jonas Richter</li>
+                <li onclick="selectPrisoner(13)">015 – Jonas Richter</li>
+                <li onclick="selectPrisoner(14)">015 – Jonas Richter</li>
+                <li onclick="selectPrisoner(15)">016 – Marius Tchetche</li>
+                <li onclick="selectPrisoner(16)">017 – Theodore Mons</li>
+                <li onclick="selectPrisoner(17)">018 – Arthur Val Serra</li>
+                <li onclick="selectPrisoner(18)">019 – Jonas Richter</li>
+                <li onclick="selectPrisoner(19)">020 – Jonas Richter</li>
+                <li onclick="selectPrisoner(20)">021 – Jonas Richter</li>
+
+            </ul>
+        </div>
+
+        <!-- INFO -->
+        <div class="block">
+            <h3>Informations détenu</h3>
+            <p id="infoText">Sélectionnez un détenu</p>
+            <p id="cellStatus"></p>
+            <button id="cellBtn" class="hidden" onclick="toggleCell()">
+                Verrouiller / Déverrouiller
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const USER = "michael.pommier";
+const PASS = "soleil";
+
+let cams = [true, true];
+let celluleNoeOuverte = false;
+
+
+let prisoners = [
+    { id: "001", name: "Hippolyte Cochard", level: "Haute sécurité", locked: true },
+    { id: "002", name: "Alexandre Malige", level: "Standard", locked: true },
+    { id: "003", name: "Nicolas Sarkozi", level: "Deluxe", locked: true },
+    { id: "004", name: "Dimitri Cha", level: "Isolement sonor", locked: true },
+    { id: "005", name: "Anouk Desmarescaux", level: "Haute sécurité", locked: true },
+    { id: "006", name: "Gaël Perdriau", level: "Isolement", locked: true },
+    { id: "007", name: "Thibaut Barbier", level: "Isolement", locked: true },
+    { id: "008", name: "Koba LaD", level: "Isolement", locked: true },
+    { id: "009", name: "Timothé Chaib", level: "Isolement sonor", locked: true },
+    { id: "010", name: "Andrea Borron", level: "Evadé", locked: false },
+    { id: "011", name: "Noé Devaux", level: "Haute sécurité", locked: true },
+    { id: "012", name: "Linda Frissou", level: "Haute sécurité", locked: true },
+    { id: "013", name: "Jonas Richter", level: "Isolement", locked: true },
+    { id: "014", name: "Jonas Richter", level: "Isolement", locked: true },
+    { id: "015", name: "Jonas Richter", level: "Isolement", locked: true },
+    { id: "016", name: "Marius Tchetche", level: "Isolement", locked: true },
+    { id: "017", name: "Theodore Mons", level: "Isolement", locked: true },
+    { id: "018", name: "Arthur Val Serra", level: "zone intankable", locked: true },
+    { id: "019", name: "Jonas Richter", level: "Isolement", locked: true },
+    { id: "020", name: "Jonas Richter", level: "Isolement", locked: true },
+    { id: "021", name: "Jonas Richter", level: "Isolement", locked: true }
+];
+
+let selected = null;
+
+// Gardien connecté (simulation)
+const currentGuard = {
+    name: "Gardien Alpha",
+    allowedPrisoners: ["001", "002","011","012","015","016","019"] // IDs autorisés
+};
+
+/* LOGIN */
+function login() {
+    if (user.value === USER && pass.value === PASS) {
+        document.getElementById("login-screen").classList.add("hidden");
+        document.getElementById("app-screen").classList.remove("hidden");
+    } else {
+        error.textContent = "Accès refusé";
+    }
+}
+
+/* CAMERAS */
+function toggleCam(n) {
+    cams[n-1] = !cams[n-1];
+    document.getElementById("cam"+n).src = cams[n-1]
+        ? "images/camera"+n+".gif"
+        : "images/brouille.gif";
+    
+    checkVictory();
+}
+
+/* DETENU */
+function selectPrisoner(i) {
+    selected = prisoners[i];
+
+    infoText.innerHTML = `
+        <strong>${selected.name}</strong><br>
+        ID : ${selected.id}<br>
+        Niveau : ${selected.level}
+    `;
+
+    const cellBtn = document.getElementById("cellBtn");
+
+    // Vérification des droits
+    if (currentGuard.allowedPrisoners.includes(selected.id)) {
+        cellBtn.disabled = false;
+        cellBtn.textContent = "Verrouiller / Déverrouiller";
+    } else {
+        cellBtn.disabled = true;
+        cellBtn.textContent = "Accès non autorisé";
+    }
+
+    updateCell();
+    cellBtn.classList.remove("hidden");
+}
+
+
+function toggleCell() {
+    if (!selected) return;
+
+    // Sécurité supplémentaire
+    if (!currentGuard.allowedPrisoners.includes(selected.id)) {
+        alert("Accès refusé : autorisation insuffisante");
+        return;
+    }
+
+    selected.locked = !selected.locked;
+    updateCell();
+    checkVictory();
+}
+
+
+function updateCell() {
+    cellStatus.textContent = selected.locked
+        ? "Cellule : VERROUILLÉE"
+        : "Cellule : DÉVERROUILLÉE";
+    cellStatus.className = selected.locked ? "locked" : "unlocked";
+}
+
+function checkVictory() {
+    const camerasOff = !cams[0] && !cams[1];
+    const noe = prisoners.find(p => p.id === "011");
+
+    if (camerasOff && noe && !noe.locked) {
+        document.getElementById("victory-screen").classList.remove("hidden");
+    }
+}
+
+function closeVictory() {
+    document.getElementById("victory-screen").classList.add("hidden");
+}
+
+
+</script>
+
+</body>
+</html>
